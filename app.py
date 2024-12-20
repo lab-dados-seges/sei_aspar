@@ -1,16 +1,17 @@
 import streamlit as st
-import os
-from datetime import datetime
+# import os
+# from datetime import datetime
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pandas as pd
 import os
-from bs4 import BeautifulSoup
-import re
-from collections import OrderedDict
+# from bs4 import BeautifulSoup
+# import re
+# from collections import OrderedDict
+from io import BytesIO
 from selenium.common.exceptions import NoSuchElementException
-import getpass
+# import getpass
 import pyshorteners
 
 # Função para realizar login
@@ -63,10 +64,11 @@ def buscar_arquivos(driver):
         driver (webdriver): Instância do WebDriver autenticada.
     """
     try:
+        time.sleep(1)
         # Acessa a área de busca
         searching = driver.find_element(By.XPATH, '//*[@id="infraMenu"]/li[14]/a/span')
         searching.click()
-        time.sleep(1)
+        time.sleep(3)
 
         # Restringe busca ao órgão específico
         sel_orgao = driver.find_element(By.XPATH, '//*[@id="divSinRestringirOrgao"]/div')
@@ -145,9 +147,9 @@ def extrair_dados(driver):
     }
 
     df = pd.DataFrame(dados)
-    return df
+    return (df, driver)
 
-def navegar_paginas(driver):
+def navegar_paginas(df, driver):
     """
     Loop para navegar por todas as páginas até que não haja mais um botão 'Próxima'.
     Retorna um DataFrame consolidado com os dados de todas as páginas.
@@ -188,6 +190,13 @@ def navegar_paginas(driver):
 
     return dados_consolidados
 
+def gerar_excel(dados_consolidados):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        dados_consolidados.to_excel(writer, index=False, sheet_name="Dados")
+    processed_data = output.getvalue()
+    return processed_data
+
 # Interface Streamlit
 st.title("Automação SEI")
 
@@ -200,8 +209,17 @@ orgao1 = st.text_input("Órgão")
 if st.button("Executar Busca"):
     with st.spinner("Realizando login e extração..."):
         driver = realizar_login(url, login1, password1, orgao1)
+        buscar_arquivos(driver)
         if driver:
             df = navegar_paginas(driver)
             driver.quit()
             st.dataframe(df)
+            
+            excel_data = gerar_excel(df)
+            st.download_button(
+                label="Baixar dados em Excel",
+                data=excel_data,
+                file_name="dados_sei.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
             
