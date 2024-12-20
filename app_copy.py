@@ -83,7 +83,7 @@ def realizar_login(url, login1, password1, orgao1):
 
         print("Busca realizada com sucesso.\nRestringindo em PL e dentro do MGI.\n\nOs Externo entram como MGI.")
         return driver
-    except Exception as a:
+    except Exception as e:
         print(f"Erro durante a busca: {e}")
         return None
     
