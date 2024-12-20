@@ -47,11 +47,14 @@ def realizar_login(url, login1, password1, orgao1):
 
         # Realiza o login
         submit_button.click()
-        time.sleep(3)  # Aguarda carregamento da página após o login
+        time.sleep(0.5)  # Aguarda carregamento da página após o login
 
         print("Login realizado com sucesso!")
         
-        time.sleep(1)
+        # except Exception as e:
+        # print(f"Erro ao realizar o login: {e}")
+        # return None
+        
         # Acessa a área de busca
         searching = driver.find_element(By.XPATH, '//*[@id="infraMenu"]/li[14]/a/span')
         searching.click()
@@ -60,59 +63,30 @@ def realizar_login(url, login1, password1, orgao1):
         # Restringe busca ao órgão específico
         sel_orgao = driver.find_element(By.XPATH, '//*[@id="divSinRestringirOrgao"]/div')
         sel_orgao.click()
-        time.sleep(1)
+        time.sleep(4)
 
         # Especifica os termos de pesquisa
         espec_pesq = driver.find_element(By.XPATH, '//*[@id="txtDescricaoPesquisa"]')
         espec_pesq.send_keys('"Projeto Lei" ou "PL" ou "RIC" ou "Projeto de Lei" ou "Requisição de Informação"')
+        time.sleep(3)
+        # colocar datas
+        time.sleep(3)
+        data_inicio = driver.find_element('xpath', '//*[@id="txtDataInicio"]')
+        data_inicio.send_keys("01/09/2024")
 
         # Realiza a pesquisa
+        time.sleep(3)
         b_pesq = driver.find_element(By.XPATH, '//*[@id="sbmPesquisar"]')
         b_pesq.click()
-        time.sleep(3)
+        time.sleep(5)
+        
 
         print("Busca realizada com sucesso.\nRestringindo em PL e dentro do MGI.\n\nOs Externo entram como MGI.")
         return driver
-    except Exception as e:
+    except Exception as a:
         print(f"Erro durante a busca: {e}")
         return None
-        
-    # except Exception as e:
-    #     print(f"Erro ao realizar o login: {e}")
-    #     return None
-
-# Função principal para busca
-# def buscar_arquivos(driver):
-    # """
-    # Realiza a busca de arquivos no sistema SEI após login.
-
-    # Args:
-    #     driver (webdriver): Instância do WebDriver autenticada.
-    # """
-    # try:
-    #     time.sleep(1)
-    #     # Acessa a área de busca
-    #     searching = driver.find_element(By.XPATH, '//*[@id="infraMenu"]/li[14]/a/span')
-    #     searching.click()
-    #     time.sleep(3)
-
-    #     # Restringe busca ao órgão específico
-    #     sel_orgao = driver.find_element(By.XPATH, '//*[@id="divSinRestringirOrgao"]/div')
-    #     sel_orgao.click()
-    #     time.sleep(1)
-
-    #     # Especifica os termos de pesquisa
-    #     espec_pesq = driver.find_element(By.XPATH, '//*[@id="txtDescricaoPesquisa"]')
-    #     espec_pesq.send_keys('"Projeto Lei" ou "PL" ou "RIC" ou "Projeto de Lei" ou "Requisição de Informação"')
-
-    #     # Realiza a pesquisa
-    #     b_pesq = driver.find_element(By.XPATH, '//*[@id="sbmPesquisar"]')
-    #     b_pesq.click()
-    #     time.sleep(3)
-
-    #     print("Busca realizada com sucesso.\nRestringindo em PL e dentro do MGI.\n\nOs Externo entram como MGI.")
-    # except Exception as e:
-    #     print(f"Erro durante a busca: {e}")
+    
         
 def extrair_dados(driver):     
     """
@@ -211,8 +185,8 @@ def navegar_paginas(driver):
             break  # Sai do loop em caso de erro inesperado
 
     # Fechar o navegador após o término
-    # driver.close()
-    # driver.quit()
+    driver.close()
+    driver.quit()
 
     return dados_consolidados
 
