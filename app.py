@@ -64,7 +64,10 @@ def realizar_login(url, login1, password1, orgao1):
 
         # Especifica os termos de pesquisa
         espec_pesq = driver.find_element(By.XPATH, '//*[@id="txtDescricaoPesquisa"]')
-        espec_pesq.send_keys('"Projeto Lei" ou "PL" ou "RIC" ou "Projeto de Lei" ou "Requisição de Informação"')
+        espec_pesq.send_keys('"Projeto Lei" ou "PL" ou "RIC" ou "Projeto de Lei" ou "Requisição de Informação" ou "PLP" ou "PLN"')
+        
+        data_inicio = driver.find_element('xpath', '//*[@id="txtDataInicio"]')
+        data_inicio.send_keys("01/08/2024")
 
         # Realiza a pesquisa
         b_pesq = driver.find_element(By.XPATH, '//*[@id="sbmPesquisar"]')

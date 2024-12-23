@@ -67,7 +67,7 @@ def realizar_login(url, login1, password1, orgao1):
 
         # Especifica os termos de pesquisa
         espec_pesq = driver.find_element(By.XPATH, '//*[@id="txtDescricaoPesquisa"]')
-        espec_pesq.send_keys('"Projeto Lei" ou "PL" ou "RIC" ou "Projeto de Lei" ou "Requisição de Informação"')
+        espec_pesq.send_keys('"Projeto Lei" ou "PL" ou "RIC" ou "Projeto de Lei" ou "Requisição de Informação" ou "PLP" ou "PLN"')
         time.sleep(3)
         # colocar datas
         time.sleep(3)
@@ -185,8 +185,8 @@ def navegar_paginas(driver):
             break  # Sai do loop em caso de erro inesperado
 
     # Fechar o navegador após o término
-    driver.close()
-    driver.quit()
+    # driver.close()
+    # driver.quit()
 
     return dados_consolidados
 
