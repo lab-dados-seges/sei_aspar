@@ -155,15 +155,32 @@ def extrair_dados(driver):
         except Exception as e:
             print(f"Erro ao processar a linha {i}: {e}")
 
-    shortener = pyshorteners.Shortener()
+    # Inicializando o encurtador de links
+    shortener = pyshorteners.Shortener(api_key='your_api_key', provider='isgd')
     links_curtos = []
+    erros = []
+    
     for link in links:
         try:
-            link_curto = shortener.tinyurl.short(link)
-            links_curtos.append(link_curto)
-            time.sleep(3)
+            # Separando a parte fixa e o hash do link
+            base_url, hash_value = link.split('infra_hash=')
+            
+            # Verificando o tamanho da parte fixa do link antes de encurtar
+            if len(base_url) > 1000:  # Ajuste o limite conforme necessário
+                raise ValueError(f"Link base muito longo: {base_url}")
+            
+            # Encurtando a parte fixa do link
+            link_curto = shortener.tinyurl.short(base_url)
+            time.sleep(0.5)
+            
+            # Recriando o link com o hash
+            link_com_hash = link_curto + 'infra_hash=' + hash_value
+            
+            links_curtos.append(link_com_hash)
+            time.sleep(0.5)
         except Exception as e:
-            print(f"Erro ao encurtar o link {link}: {e}")
+            erros.append((link, str(e)))
+            links_curtos.append(None)
 
     dados = {
         "Número do Processo": trees[::2],
