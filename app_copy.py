@@ -223,4 +223,3 @@ if st.button("Executar Busca"):
                 file_name="dados_sei.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
-            
