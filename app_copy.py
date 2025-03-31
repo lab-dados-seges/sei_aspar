@@ -78,7 +78,7 @@ def realizar_login(url, login1, password1, orgao1):
         time.sleep(3)
         b_pesq = driver.find_element(By.XPATH, '//*[@id="sbmPesquisar"]')
         b_pesq.click()
-        time.sleep(5)
+        time.sleep(3)
         
 
         print("Busca realizada com sucesso.\nRestringindo em PL e dentro do MGI.\n\nOs Externo entram como MGI.")
