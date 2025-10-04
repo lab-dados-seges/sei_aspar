@@ -39,6 +39,7 @@ celerybeat.pid
 # Environment
 .env
 .venv
+.env.local
 
 # IDEs
 .vscode/
