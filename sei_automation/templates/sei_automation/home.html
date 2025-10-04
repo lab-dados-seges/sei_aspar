@@ -1,0 +1,85 @@
+{% extends 'sei_automation/base.html' %}
+
+{% block title %}Dashboard - SEI Automation{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-search"></i> Total de Buscas</h5>
+                <h2>{{ total_buscas }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-file-earmark-text"></i> Documentos Coletados</h5>
+                <h2>{{ total_documentos }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-clock-history"></i> Ações Rápidas</h5>
+                <a href="{% url 'nova_busca' %}" class="btn btn-light btn-sm mt-2">
+                    <i class="bi bi-plus-circle"></i> Nova Busca
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h4>Buscas Recentes</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Órgão</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                        <th>Documentos</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for busca in buscas_recentes %}
+                    <tr>
+                        <td>{{ busca.id }}</td>
+                        <td>{{ busca.orgao }}</td>
+                        <td>
+                            {% if busca.status == 'concluida' %}
+                                <span class="badge bg-success">Concluída</span>
+                            {% elif busca.status == 'em_andamento' %}
+                                <span class="badge bg-warning">Em Andamento</span>
+                            {% elif busca.status == 'erro' %}
+                                <span class="badge bg-danger">Erro</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Pendente</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ busca.data_criacao|date:"d/m/Y H:i" }}</td>
+                        <td>{{ busca.documentos.count }}</td>
+                        <td>
+                            <a href="{% url 'busca_detalhe' busca.id %}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Nenhuma busca realizada ainda.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
