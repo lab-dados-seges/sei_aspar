@@ -1,0 +1,90 @@
+{% extends 'sei_automation/base.html' %}
+
+{% block title %}Nova Busca - SEI Automation{% endblock %}
+{% block page_title %}Nova Busca no SEI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <h5 class="mb-3">Configuração da Busca</h5>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.url_sei.id_for_label }}" class="form-label">URL do SEI</label>
+                        {{ form.url_sei }}
+                        {% if form.url_sei.errors %}
+                            <div class="text-danger">{{ form.url_sei.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.usuario_sei.id_for_label }}" class="form-label">Usuário SEI</label>
+                        {{ form.usuario_sei }}
+                        {% if form.usuario_sei.errors %}
+                            <div class="text-danger">{{ form.usuario_sei.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.senha_sei.id_for_label }}" class="form-label">Senha SEI</label>
+                        {{ form.senha_sei }}
+                        <small class="form-text text-muted">{{ form.senha_sei.help_text }}</small>
+                        {% if form.senha_sei.errors %}
+                            <div class="text-danger">{{ form.senha_sei.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.orgao.id_for_label }}" class="form-label">Órgão</label>
+                        {{ form.orgao }}
+                        {% if form.orgao.errors %}
+                            <div class="text-danger">{{ form.orgao.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.termos_pesquisa.id_for_label }}" class="form-label">Termos de Pesquisa</label>
+                        {{ form.termos_pesquisa }}
+                        <small class="form-text text-muted">
+                            Exemplo: "Projeto Lei" ou "PL" ou "RIC"
+                        </small>
+                        {% if form.termos_pesquisa.errors %}
+                            <div class="text-danger">{{ form.termos_pesquisa.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.data_inicio.id_for_label }}" class="form-label">Data Início</label>
+                            {{ form.data_inicio }}
+                            {% if form.data_inicio.errors %}
+                                <div class="text-danger">{{ form.data_inicio.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.data_fim.id_for_label }}" class="form-label">Data Fim</label>
+                            {{ form.data_fim }}
+                            {% if form.data_fim.errors %}
+                                <div class="text-danger">{{ form.data_fim.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-search"></i> Executar Busca
+                        </button>
+                        <a href="{% url 'home' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Voltar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

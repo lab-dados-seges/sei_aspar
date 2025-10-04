@@ -1,0 +1,101 @@
+{% extends 'sei_automation/base.html' %}
+
+{% block title %}Minhas Buscas - SEI Automation{% endblock %}
+{% block page_title %}Minhas Buscas{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-12">
+        <a href="{% url 'nova_busca' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Nova Busca
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Órgão</th>
+                                <th>Termos</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Documentos</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for busca in page_obj %}
+                            <tr>
+                                <td>{{ busca.id }}</td>
+                                <td>{{ busca.orgao }}</td>
+                                <td>{{ busca.termos_pesquisa|truncatewords:5 }}</td>
+                                <td>
+                                    {% if busca.status == 'concluida' %}
+                                        <span class="badge bg-success">Concluída</span>
+                                    {% elif busca.status == 'em_andamento' %}
+                                        <span class="badge bg-warning">Em Andamento</span>
+                                    {% elif busca.status == 'erro' %}
+                                        <span class="badge bg-danger">Erro</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Pendente</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ busca.data_criacao|date:"d/m/Y H:i" }}</td>
+                                <td>{{ busca.documentos.count }}</td>
+                                <td>
+                                    <a href="{% url 'busca_detalhe' busca.id %}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                    {% if busca.status == 'concluida' %}
+                                    <a href="{% url 'exportar_excel' busca.id %}" class="btn btn-sm btn-success">
+                                        <i class="bi bi-file-earmark-excel"></i> Excel
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">Nenhuma busca encontrada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

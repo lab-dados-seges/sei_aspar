@@ -1,0 +1,96 @@
+{% extends 'sei_automation/base.html' %}
+
+{% block title %}Configurações - SEI Automation{% endblock %}
+{% block page_title %}Configurações{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Nova Configuração</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.nome.id_for_label }}" class="form-label">Nome da Configuração</label>
+                        {{ form.nome }}
+                        {% if form.nome.errors %}
+                            <div class="text-danger">{{ form.nome.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.url_sei.id_for_label }}" class="form-label">URL do SEI</label>
+                        {{ form.url_sei }}
+                        {% if form.url_sei.errors %}
+                            <div class="text-danger">{{ form.url_sei.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.usuario_sei.id_for_label }}" class="form-label">Usuário SEI</label>
+                        {{ form.usuario_sei }}
+                        {% if form.usuario_sei.errors %}
+                            <div class="text-danger">{{ form.usuario_sei.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.senha_sei.id_for_label }}" class="form-label">Senha SEI</label>
+                        {{ form.senha_sei }}
+                        {% if form.senha_sei.errors %}
+                            <div class="text-danger">{{ form.senha_sei.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.orgao.id_for_label }}" class="form-label">Órgão</label>
+                        {{ form.orgao }}
+                        {% if form.orgao.errors %}
+                            <div class="text-danger">{{ form.orgao.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.ativo }}
+                        <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                            Configuração Ativa
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Salvar Configuração
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Configurações Salvas</h5>
+                <div class="list-group">
+                    {% for config in configs %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ config.nome }}</h6>
+                            {% if config.ativo %}
+                                <span class="badge bg-success">Ativa</span>
+                            {% endif %}
+                        </div>
+                        <p class="mb-1"><strong>Órgão:</strong> {{ config.orgao }}</p>
+                        <small><strong>URL:</strong> {{ config.url_sei }}</small>
+                    </div>
+                    {% empty %}
+                    <div class="list-group-item">
+                        Nenhuma configuração salva.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
